@@ -27,32 +27,11 @@ class Add(webapp2.RequestHandler):
         # print(sorted_alphabets)
         merged_word = self.merge(sorted_alphabets)
         return merged_word
+    # def incrementCounter(self, user)
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
 
-        action= self.request.get('search_button')
-        message = ''
-        Anagram = ''
-
-        user = users.get_current_user()
-
-        searched_string=self.request.get('search_word')
-        # print(searched_string)
-        lex_word = self.sort(searched_string.lower())
-        # sorted_alphabets = sorted(self.split(searched_string.lower()))
-        # print(lex_word)
-        key_word=user.user_id() + lex_word
-        # print(key_word)
-        word_key= ndb.Key('Words', key_word)
-        word=word_key.get()
-        if word == None:
-            message= 'Anagram not found'
-        else:
-            message=''
-            Anagram = word.wordsList
         Template_values ={
-        'message': message,
-        'word': Anagram
         }
         template = JINJA_ENVIRONMENT.get_template('add.html')
         self.response.write(template.render(Template_values))
@@ -74,19 +53,28 @@ class Add(webapp2.RequestHandler):
         action = self.request.get('add_button')
         # print (action)
         user = users.get_current_user()
+
+
+        # print(myuser)
         add_string=self.request.get('word_input')
-        # print(add_string)
+
         sorted_alphabets = sorted(self.split(add_string.lower()))
         keyword=user.user_id() + self.merge(sorted_alphabets)
-        key = ndb.Key('Words', keyword)
-        word = key.get()
-        if word ==None:
-            word = Words(id=keyword)
-            word.count_of_words=0
 
-            word.put()
+
+
 
         if action == 'Add':
+            key = ndb.Key('Words', keyword)
+            word = key.get()
+            myuser_key= ndb.Key('MyUser', user.user_id())
+            myuser=myuser_key.get()
+            if word == None:
+                word = Words(id=keyword)
+                word.count_of_words=0
+                word.put()
+                myuser.uniqueAnagramCounter=myuser.uniqueAnagramCounter+1
+                myuser.put()
             string = keyword
             if string == '' or string == None or len(string)<3:
                 self.redirect('/add')
@@ -106,6 +94,8 @@ class Add(webapp2.RequestHandler):
                 word.alphabet_no_List.append(len(add_string))
                 word.put()
 
+                myuser.wordCounter= myuser.wordCounter+1
+                myuser.put()
         # Code to read from text document
         # root = Tk()
         # root.fileName = filedialog.askopenfilename(filetypes =(("All text file", "*.txt")))
@@ -118,41 +108,42 @@ class Add(webapp2.RequestHandler):
             #     print (sorted_word_from_text)
                 dict.append(line.rstrip())
 
-        print(dict)
+
         # user = users.get_current_user()
         file_action = self.request.get('add_from_files')
-        print (file_action)
+
         if file_action=='Add':
             print(len(dict))
             for i in dict:
-                keyword1=user.user_id() + self.sort(i)
-                print(keyword1)
-                key = ndb.Key('Words', keyword1)
-                word = key.get()
-                # print(word)
-                new_word = False
-                if word!=None:
-                    if word.wordsList.count(i)==0:
+                if len(i)>0:
+                    keyword1=user.user_id() + self.sort(i)
+
+                    key = ndb.Key('Words', keyword1)
+                    word = key.get()
+                    # print(word)
+                    new_word = False
+                    if word!=None:
+                        if word.wordsList.count(i)==0:
+                            word.wordsList.append(i)
+                            word.count_of_words=word.count_of_words+1
+                            word.alphabet_no_List.append(len(i))
+                            word.put()
+
+                        # word.wordsList.append(i)
+                        # word.count_of_words=word.count_of_words+1
+                        # word.alphabet_no_List.append(len(i))
+                        # word.put()
+                    else:
+                        new_word=True
+                    if(new_word):
+                        word = Words(id=keyword1)
+                        print(i + " word is added")
                         word.wordsList.append(i)
-                        word.count_of_words=word.count_of_words+1
+                        word.count_of_words=1
                         word.alphabet_no_List.append(len(i))
                         word.put()
-
-                    # word.wordsList.append(i)
-                    # word.count_of_words=word.count_of_words+1
-                    # word.alphabet_no_List.append(len(i))
-                    # word.put()
-                else:
-                    new_word=True
-                if(new_word):
-                    word = Words(id=keyword1)
-                    print(i + " word is added")
-                    word.wordsList.append(i)
-                    word.count_of_words=1
-                    word.alphabet_no_List.append(len(i))
-                    word.put()
-                    print(i)
-                self.redirect('/add')
+                        print(i)
+                    self.redirect('/add')
 
 
 

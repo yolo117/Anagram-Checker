@@ -10,7 +10,15 @@
     <h1 align: centre;>{{ welcome}} {{ user.email() }}!</h1>
     <p align: centre;>Hello guest, Welcome to the application</p>
     <p align: centre;> Add new words <a href="/add">here</a></p>
-
+    <form  action="/" method="get">
+     <input type="text" name="search_word" placeholder="String">
+     <input type="submit" name="search_button" value="Search">
+     {% if word %}
+     {% for i in word %}
+     <br>{{ i }}
+     {% endfor %}
+     {% endif %}
+    </form>
     {% endif %}
     <p align: centre;>you can {{ url_string }} <a href="{{ url }}"> here</a></p>
 
