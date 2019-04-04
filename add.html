@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Add and display </title>
+  </head>
+  <body>
+
+
+<form action="/add" method="post">
+  <p>Enter the word : <input type="text" name="word_input" pattern="[A-Za-z]{3,}" title="Enter atleast three letter word" >
+  <input type="submit" name="add_button" value="Add" ><br>
+  <p>Click Add to add values in Text file to the Data store : <input type="submit" name="add_from_files" value="Add"></p>
+
+</form>
+{% if message %}
+
+{{ message }}
+{% endif %}
+<form  action="/add" method="get">
+ <input type="text" name="search_word" placeholder="String">
+ <input type="submit" name="search_button" value="Search">
+ {% if word %}
+ {% for i in word %}
+ <br>{{ i }}
+ {% endfor %}
+ {% endif %}
+</form>
+
+
+  </body>
+</html>

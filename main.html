@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <meta charset="utf-8">
+    <title>User Login/Logout using DataStore
+    <link rel="stylesheet" type="text/css" href="table.css"></title>
+  </head>
+  <body>
+    {% if user %}
+    <h1 align: centre;>{{ welcome}} {{ user.email() }}!</h1>
+    <p align: centre;>Hello guest, Welcome to the application</p>
+    <p align: centre;> Add new words <a href="/add">here</a></p>
+
+    {% endif %}
+    <p align: centre;>you can {{ url_string }} <a href="{{ url }}"> here</a></p>
+
+
+</p>
+  </body>
+</html>
