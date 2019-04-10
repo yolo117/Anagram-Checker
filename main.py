@@ -28,17 +28,47 @@ class MainPage(webapp2.RequestHandler):
         # print(sorted_alphabets)
         merged_word = self.merge(sorted_alphabets)
         return merged_word
+
+    # def substring(self, str):
+    #     list = self.split(str)
+    #     new_word_list=[]
+    #     for i in range(len(list)):
+    #         x = list[i]
+    #         xs = list[i + 1:]
+
+    def substring(self, str):
+        List=self.split(str)
+        randomList=[]
+        # print list(enumerate(List))
+        i=0
+        for count, element in enumerate(List):
+            if count!=i:
+                randomList.append((element))
+                # print(randomList)
+                i=i+1
+        # print(self.merge(randomList))
+        return(self.merge(randomList))
+        self.substring(self.merge(randomList))
+
+
+
+
     def get(self):
         self.response.headers['Content-Type'] = 'text/html' #We define how the response is going to be
 
         url='' #the variable to store the URL link that will be created
         url_string='' #Tells something about the name of the URL
         user = users.get_current_user() # we get the current user information
-        welcome = 'Welcome back' #used for displaying particular messages based on the user
+        welcome = 'Welcome' #used for displaying particular messages based on the user
 
+        subanagram_action= self.request.get('button_search_subanagram')
+
+        # self.substringcreator('aerl')
         action= self.request.get('search_button')
+
         message = ''
         Anagram = ''
+        subanagram=''
 
         if user: #if we have a current user
             url=users.create_logout_url(self.request.uri) #we will create a logout_url for the user
@@ -66,12 +96,28 @@ class MainPage(webapp2.RequestHandler):
                 myuser.wordCounter=0
                 myuser.put()
 
-        # section for subanagrams
-        
+            # section for subanagrams
+            if subanagram_action== 'Search':
+                subana=self.request.get('input_subanagram_word')
+                print(self.substring(subana))
+                lex_subana = self.sort(subana.lower())
+                key_word_sub=user.user_id() + lex_subana
+                word_key_sub= ndb.Key('Words', key_word_sub)
+                sub_word=word_key_sub.get()
+                if sub_word == None:
+                    message= 'Sub Anagram not found'
+                else:
+                    message=''
+                    subanagram = sub_word.wordsList
+                    print(subanagram)
 
+
+            print(subanagram)
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'Login'
+
+
 
         template_values = {
             'url': url ,
@@ -79,7 +125,8 @@ class MainPage(webapp2.RequestHandler):
             'user': user ,
             'welcome': welcome,
             'message': message,
-            'word': Anagram
+            'word': Anagram,
+            'subanagram': subanagram
         }
 
         template = JINJA_ENVIRONMENT.get_template('main.html')

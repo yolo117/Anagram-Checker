@@ -4,23 +4,88 @@
     <meta charset="utf-8">
     <title>User Login/Logout using DataStore
     <link rel="stylesheet" type="text/css" href="table.css"></title>
+    <style media="screen">
+    .split {
+height: 40%;
+width: 50%;
+position: fixed;
+margin-top: 200px;
+z-index: 1;
+top: 0;
+overflow-x: hidden;
+padding-top: 20px;
+margin-bottom: 1000;
+}
+
+/* Control the left side */
+.left {
+left: 0;
+background-color: blue;
+}
+
+/* Control the right side */
+.right {
+right: 0;
+
+background-color: red;
+}
+.Centre {
+  position: absolute;
+
+  left: 50%;
+  margin-top: 100px;
+  transform: translate(-30%, -30%);
+  text-align: center;
+    </style>
   </head>
   <body>
     {% if user %}
     <h1 align: centre;>{{ welcome}} {{ user.email() }}!</h1>
-    <p align: centre;>Hello guest, Welcome to the application</p>
+    <p align: centre;>Hello {{user.email()}}, Welcome to the application</p>
     <p align: centre;> Add new words <a href="/add">here</a></p>
-    <form  action="/" method="get">
-     <input type="text" name="search_word" placeholder="String">
-     <input type="submit" name="search_button" value="Search">
-     {% if word %}
-     {% for i in word %}
-     <br>{{ i }}
-     {% endfor %}
-     {% endif %}
+    <div class="split left">
+      <div class="Centre">
+        <form  action="/" method="get">
+         <input type="text" name="search_word" placeholder="String">
+         <input type="submit" name="search_button" value="Search">
+         <table border="1">
+
+         {% if word %}
+         {% for i in word %}
+         <tr><th>{{ i }}</th></tr>
+         {% endfor %}
+         {% endif %}
+        </form>
+
+        </table>
+
+
+
+      </div>
+
     </form>
-    {% endif %}
-    <p align: centre;>you can {{ url_string }} <a href="{{ url }}"> here</a></p>
+
+    </div>
+    <div class="split right">
+      <div class="Centre">
+        <form  action="/" method="get">
+         <input type="text" name="input_subanagram_word" placeholder="Subanagram">
+         <input type="submit" name="button_search_subanagram" value="Search">
+         <table border="1">
+
+         {% if subanagram %}
+         {% for i in subanagram %}
+         <tr><th>{{ i }}</th></tr>
+         {% endfor %}
+         {% endif %}
+        </form>
+        {% endif %}
+        </table>
+      </div>
+
+
+    </div>
+    <p align:bottom;>you can {{ url_string }} <a href="{{ url }}"> here</a></p>
 
 
 </p>

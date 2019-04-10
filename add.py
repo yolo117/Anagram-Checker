@@ -30,20 +30,15 @@ class Add(webapp2.RequestHandler):
     # def incrementCounter(self, user)
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-
+        display_message='Add words in the Anagram Engine'
         Template_values ={
+        'display_message': display_message
         }
         template = JINJA_ENVIRONMENT.get_template('add.html')
         self.response.write(template.render(Template_values))
 
 
-        # else:
-        #     message='enter an anagram and click search'
-        #     Template_values ={
-        #     'message': message
-        #     }
-        #     template = JINJA_ENVIRONMENT.get_template('add.html')
-        #     self.response.write(template.render(Template_values))
+
 
 
 

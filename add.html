@@ -2,15 +2,30 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Add and display </title>
+    <title>Add words  </title>
+    <style media="screen">
+    body {
+        background-color: lightblue;
+      }
+    p{
+  text-align: center;
+
+}
+h1{
+   text-align: center;
+   color: red;
+ }
+    </style>
   </head>
   <body>
 
-
+<h1> Add new Anagrams to the database</h1>
 <form action="/add" method="post">
   <p>Enter the word : <input type="text" name="word_input" pattern="[A-Za-z]{3,}" title="Enter atleast three letter word" >
-  <input type="submit" name="add_button" value="Add" ><br>
-  <p>Click Add to add values in Text file to the Data store : <input type="submit" name="add_from_files" value="Add"></p>
+  <p><input type="submit" name="add_button" value="Add" ><br>
+
+  <p>Click Add to add values in Text file to the Data store <br>
+    <p><input type="submit" name="add_from_files" value="Add"></p>
 
 </form>
 {% if message %}
@@ -18,6 +33,7 @@
 {{ message }}
 {% endif %}
 
+<a href="/">previous page</a>
 
 
   </body>
